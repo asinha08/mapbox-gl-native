@@ -120,6 +120,7 @@ void registerNatives(JavaVM *vm) {
     java::lang::Boolean::registerNative(env);
     java::lang::Double::registerNative(env);
     java::lang::Long::registerNative(env);
+    java::lang::String::registerNative(env);
 
     // GeoJSON
     geojson::Feature::registerNative(env);

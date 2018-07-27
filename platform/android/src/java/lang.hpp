@@ -8,6 +8,17 @@ namespace android {
 namespace java {
 namespace lang {
 
+class String : private mbgl::util::noncopyable {
+public:
+    static jni::String toUpperCase(JNIEnv&, jni::String);
+
+    static jni::String toLowerCase(JNIEnv&, jni::String);
+
+    static jni::Class<jni::StringTag> javaClass;
+
+    static void registerNative(jni::JNIEnv&);
+};
+
 class Float : private mbgl::util::noncopyable {
 public:
     static constexpr auto Name() { return "java/lang/Float"; };
