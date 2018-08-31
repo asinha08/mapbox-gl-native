@@ -53,6 +53,12 @@ namespace android {
         return jni::Object<jni::ObjectTag>(*converted);
     }
 
+    jni::Object<jni::ObjectTag> SymbolLayer::getSymbolZOrder(jni::JNIEnv& env) {
+        using namespace mbgl::android::conversion;
+        Result<jni::jobject*> converted = convert<jni::jobject*>(env, layer.as<mbgl::style::SymbolLayer>()->SymbolLayer::getSymbolZOrder());
+        return jni::Object<jni::ObjectTag>(*converted);
+    }
+
     jni::Object<jni::ObjectTag> SymbolLayer::getIconAllowOverlap(jni::JNIEnv& env) {
         using namespace mbgl::android::conversion;
         Result<jni::jobject*> converted = convert<jni::jobject*>(env, layer.as<mbgl::style::SymbolLayer>()->SymbolLayer::getIconAllowOverlap());
@@ -514,6 +520,7 @@ namespace android {
             METHOD(&SymbolLayer::getSymbolPlacement, "nativeGetSymbolPlacement"),
             METHOD(&SymbolLayer::getSymbolSpacing, "nativeGetSymbolSpacing"),
             METHOD(&SymbolLayer::getSymbolAvoidEdges, "nativeGetSymbolAvoidEdges"),
+            METHOD(&SymbolLayer::getSymbolZOrder, "nativeGetSymbolZOrder"),
             METHOD(&SymbolLayer::getIconAllowOverlap, "nativeGetIconAllowOverlap"),
             METHOD(&SymbolLayer::getIconIgnorePlacement, "nativeGetIconIgnorePlacement"),
             METHOD(&SymbolLayer::getIconOptional, "nativeGetIconOptional"),
