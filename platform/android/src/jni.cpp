@@ -194,6 +194,7 @@ void registerNatives(JavaVM *vm) {
     LocalGlyphRasterizer::registerNative(env);
     Locale::registerNative(env);
     Collator::registerNative(env);
+    StringUtils::registerNative(env);
 
     // Logger
     Logger::registerNative(env);

@@ -5,6 +5,7 @@
 #include <unaccent.hpp>
 
 #include <jni/jni.hpp>
+#include "src/java/lang.hpp"
 
 #include "../attach_env.hpp"
 #include "collator_jni.hpp"
@@ -34,6 +35,19 @@ jni::jint Collator::compare(jni::JNIEnv& env, jni::Object<Collator> collator, jn
     using Signature = jni::jint(jni::String, jni::String);
     auto static method = javaClass.GetMethod<Signature>(env, "compare");
     return collator.Call(env, method, lhs, rhs);
+}
+
+
+void StringUtils::registerNative(jni::JNIEnv& env) {
+    javaClass = *jni::Class<StringUtils>::Find(env).NewGlobalRef(env).release();
+}
+
+jni::Class<StringUtils> StringUtils::javaClass;
+
+jni::String StringUtils::unaccent(jni::JNIEnv& env, jni::String value) {
+    using Signature = jni::String(jni::String);
+    auto static method = javaClass.GetStaticMethod<Signature>(env, "unaccent");
+    return javaClass.Call(env, method, value);
 }
 
 void Locale::registerNative(jni::JNIEnv& env) {
