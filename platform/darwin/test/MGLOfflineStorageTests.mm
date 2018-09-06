@@ -264,4 +264,49 @@
     [os setDelegate:nil];
 }
 
+- (void)testAddingFileContent {
+    
+    NSURL *styleURL = [MGLStyle streetsStyleURLWithVersion:MGLStyleDefaultVersion];
+    
+    // Barcelona.
+    MGLCoordinateBounds bounds = {
+        { .latitude = 41.2724, .longitude = 2.0407 },
+        { .latitude = 41.4664, .longitude = 2.2680 },
+    };
+    double zoomLevel = 20;
+    MGLTilePyramidOfflineRegion *region = [[MGLTilePyramidOfflineRegion alloc] initWithStyleURL:styleURL bounds:bounds fromZoomLevel:zoomLevel toZoomLevel:zoomLevel];
+    
+    NSString *nameKey = @"Name";
+    NSString *name = @"Barcelona";
+    
+    NSData *context = [NSKeyedArchiver archivedDataWithRootObject:@{
+                                                                    nameKey: name,
+                                                                    }];
+    
+    [[MGLOfflineStorage sharedOfflineStorage] addPackForRegion:region withContext:context completionHandler:^(MGLOfflinePack * _Nullable completionHandlerPack, NSError * _Nullable error) {
+        XCTAssertNotNil(completionHandlerPack, @"Added pack should exist.");
+        XCTAssertEqual(completionHandlerPack.state, MGLOfflinePackStateInactive, @"New pack should initially have inactive state.");
+    }];
+    
+    NSURL *resourceURL = [NSURL fileURLWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"barcelona" ofType:@"db"]];
+    NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDir = [documentPaths objectAtIndex:0];
+    NSString *filePath = [documentDir stringByAppendingPathComponent:@"barcelona.db"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    BOOL exists = [fileManager fileExistsAtPath:filePath];
+    if (exists) {
+        [fileManager removeItemAtPath:filePath error:nil];
+    }
+    
+    NSError *error;
+    [fileManager moveItemAtURL:resourceURL toURL:[NSURL fileURLWithPath:filePath] error:&error];
+    
+    MGLOfflineStorage *os = [MGLOfflineStorage sharedOfflineStorage];
+    [os addContentesOfFile:filePath withCompletionHandler:^(NSArray<MGLOfflinePack *> * _Nonnull packs, NSError * _Nullable error) {
+        XCTAssertNotNil(packs, @"Adding contents to a file should return the newly added packages.");
+        XCTAssertNil(error, @"Adding contents to a file should not return an error.");
+    }];
+}
+
 @end
