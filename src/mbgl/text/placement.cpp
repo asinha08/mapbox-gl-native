@@ -43,9 +43,9 @@ const CollisionGroups::CollisionGroup& CollisionGroups::get(const std::string& s
             uint16_t nextGroupID = ++maxGroupID;
             collisionGroups.emplace(sourceID, CollisionGroup(
                 nextGroupID,
-                [nextGroupID](const IndexedSubfeature& feature) -> bool {
+                optional<Predicate>([nextGroupID](const IndexedSubfeature& feature) -> bool {
                     return feature.collisionGroupId == nextGroupID;
-                }
+                })
             ));
         }
         return collisionGroups[sourceID];
