@@ -68,8 +68,8 @@ public:
     std::vector<T> query(const BBox&) const;
     std::vector<std::pair<T,BBox>> queryWithBoxes(const BBox&) const;
     
-    bool hitTest(const BBox&, optional<std::function<bool(const T&)>> predicate) const;
-    bool hitTest(const BCircle&, optional<std::function<bool(const T&)>> predicate) const;
+    bool hitTest(const BBox&, optional<std::function<bool(const T&)>> predicate = nullopt) const;
+    bool hitTest(const BCircle&, optional<std::function<bool(const T&)>> predicate = nullopt) const;
     
     bool empty() const;
 
