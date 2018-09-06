@@ -621,7 +621,10 @@ void NodeMap::cancel() {
 
     frontend = std::make_unique<mbgl::HeadlessFrontend>(mbgl::Size{ 256, 256 }, pixelRatio, *this, threadpool);
     map = std::make_unique<mbgl::Map>(*frontend, mapObserver, frontend->getSize(), pixelRatio,
-                                      *this, threadpool, mode);
+                                      *this, threadpool, mode,
+                                      mbgl::ConstrainMode::HeightOnly,
+                                      mbgl::ViewportMode::Default,
+                                      crossSourceCollisions);
 
     // FIXME: Reload the style after recreating the map. We need to find
     // a better way of canceling an ongoing rendering on the core level
