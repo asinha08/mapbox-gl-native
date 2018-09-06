@@ -1212,6 +1212,14 @@ NodeMap::NodeMap(v8::Local<v8::Object> options)
                 return mbgl::MapMode::Static;
             }
       }())
+    , crossSourceCollisions([&] {
+        Nan::HandleScope scope;
+        return Nan::Has(options, Nan::New("crossSourceCollisions").ToLocalChecked()).FromJust()
+            ? Nan::Get(options, Nan::New("crossSourceCollisions").ToLocalChecked())
+                .ToLocalChecked()
+                ->BooleanValue()
+            : true;
+    }())
     , mapObserver(NodeMapObserver())
     , frontend(std::make_unique<mbgl::HeadlessFrontend>(mbgl::Size { 256, 256 }, pixelRatio, *this, threadpool))
     , map(std::make_unique<mbgl::Map>(*frontend,
@@ -1220,7 +1228,10 @@ NodeMap::NodeMap(v8::Local<v8::Object> options)
                                       pixelRatio,
                                       *this,
                                       threadpool,
-                                      mode)),
+                                      mode,
+                                      mbgl::ConstrainMode::HeightOnly,
+                                      mbgl::ViewportMode::Default,
+                                      crossSourceCollisions)),
       async(new uv_async_t) {
 
     async->data = this;

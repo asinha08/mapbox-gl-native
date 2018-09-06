@@ -32,7 +32,8 @@ export default function (style, options, callback) {
         map = new mbgl.Map({
             ratio: options.pixelRatio,
             request: mapRequest,
-            mode: options.mapMode
+            mode: options.mapMode,
+            crossSourceCollisions: options.crossSourceCollisions
         });
     }
 
