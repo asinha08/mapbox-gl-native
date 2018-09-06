@@ -41,12 +41,12 @@ const CollisionGroups::CollisionGroup& CollisionGroups::get(const std::string& s
     if (!crossSourceCollisions) {
         if (collisionGroups.find(sourceID) == collisionGroups.end()) {
             uint16_t nextGroupID = ++maxGroupID;
-            collisionGroups.emplace(sourceID, CollisionGroup{
+            collisionGroups.emplace(sourceID, CollisionGroup(
                 nextGroupID,
                 [nextGroupID](const IndexedSubfeature& feature) -> bool {
                     return feature.collisionGroupId == nextGroupID;
                 }
-            });
+            ));
         }
         return collisionGroups[sourceID];
     } else {
