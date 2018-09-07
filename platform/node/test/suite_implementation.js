@@ -25,7 +25,7 @@ export default function (style, options, callback) {
                 ratio: options.pixelRatio,
                 request: mapRequest,
                 mode: options.mapMode,
-                crossSourceCollisions: options.crossSourceCollisions
+                crossSourceCollisions: typeof options.crossSourceCollisions === "undefined" ? true : options.crossSourceCollisions
             }));
             map = maps.get(key);
         }
@@ -34,7 +34,7 @@ export default function (style, options, callback) {
             ratio: options.pixelRatio,
             request: mapRequest,
             mode: options.mapMode,
-            crossSourceCollisions: options.crossSourceCollisions
+            crossSourceCollisions: typeof options.crossSourceCollisions === "undefined" ? true : options.crossSourceCollisions
         });
     }
 
